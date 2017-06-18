@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +21,7 @@ namespace MathematicalLinguisticsTask5
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -27,6 +29,27 @@ namespace MathematicalLinguisticsTask5
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            var regex = new Regex(@"(?x)
+                ^
+                (?> (?<p> \( )* (?>-?\d+(?:\.\d+)?) (?<-p> \) )* )
+                (?>(?:
+                    [-+*:^]
+                    (?> (?<p> \( )* (?>-?\d+(?:\.\d+)?) (?<-p> \) )* )
+                )*)
+                (?(p)(?!))
+                $
+            ");
+
+            if (regex.IsMatch(txtInput.Text))
+            {
+                txtOutput.Text = "Valid";
+                txtOutput.Foreground = new SolidColorBrush(Color.FromRgb(50, 255, 50));
+            }
+            else
+            {
+                txtOutput.Text = "Invalid";
+                txtOutput.Foreground = new SolidColorBrush(Color.FromRgb(255, 50, 50));
+            }
 
         }
     }
